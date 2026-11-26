@@ -1,0 +1,29 @@
+:root{--azul:#1f3a5f;--gris:#f3f6fa;--borde:#d0d7e2;--ok:#1b7f3b;--err:#b3261e;--warn:#8a6100}
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--gris);color:#1c2430}
+header{background:var(--azul);color:#fff;padding:.6rem 1.2rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+header a{color:#fff;text-decoration:none;font-size:.95rem}
+header a:hover{text-decoration:underline}
+header .sp{flex:1}
+header form{display:inline}
+main{max-width:1100px;margin:1.2rem auto;padding:0 1rem}
+.card{background:#fff;border:1px solid var(--borde);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1rem}
+h1{font-size:1.4rem;margin:.2rem 0 1rem}h2{font-size:1.1rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th{background:var(--azul);color:#fff;text-align:left;padding:.45rem .5rem}
+td{border-bottom:1px solid var(--borde);padding:.4rem .5rem}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.tot td{font-weight:bold;background:#e8eef5}
+input,select{padding:.4rem;border:1px solid var(--borde);border-radius:5px;font-size:.9rem;max-width:100%}
+label{display:block;font-size:.85rem;margin:.5rem 0 .2rem}
+.row{display:flex;gap:.8rem;flex-wrap:wrap;align-items:flex-end}
+button,.btn{background:var(--azul);color:#fff;border:0;padding:.5rem .9rem;border-radius:5px;cursor:pointer;font-size:.9rem;text-decoration:none;display:inline-block}
+button.sec,.btn.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+button.del{background:var(--err)}
+.msg{padding:.6rem .9rem;border-radius:6px;margin-bottom:.6rem}
+.msg.ok{background:#e4f4ea;color:var(--ok)}.msg.error{background:#fbe7e5;color:var(--err)}.msg.warn{background:#fff3d6;color:var(--warn)}
+.auth{max-width:420px;margin:3rem auto}
+.stats{display:flex;gap:1rem;flex-wrap:wrap}.stat{flex:1;min-width:140px;text-align:center}.stat b{font-size:1.8rem;color:var(--azul)}
+.tabs a{margin-right:.4rem;margin-bottom:.4rem}
+.small{font-size:.8rem;color:#55606e}
+.scroll{overflow-x:auto}

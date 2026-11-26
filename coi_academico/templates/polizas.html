@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Pólizas{% endblock %}
+{% block content %}<h1>Pólizas</h1><p><a class="btn" href="{{ url_for('poliza_nueva') }}">+ Nueva póliza</a></p>
+<div class="card"><div class="scroll"><table><tr><th>Póliza</th><th>Fecha</th><th>Concepto</th><th class="n">Importe</th></tr>
+{% for p in polizas %}<tr><td><a href="{{ url_for('poliza_ver', pid=p.id) }}">{{ p.tipo[0] }}-{{ p.numero }}</a> <span class="small">{{ p.tipo }}</span></td><td>{{ p.fecha }}</td><td>{{ p.concepto }}</td><td class="n">{{ p.total|money }}</td></tr>
+{% else %}<tr><td colspan="4">Sin pólizas.</td></tr>{% endfor %}</table></div></div>{% endblock %}

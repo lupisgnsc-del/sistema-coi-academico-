@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Póliza{% endblock %}
+{% block content %}<h1>Póliza {{ p.tipo[0] }}-{{ p.numero }} <span class="small">{{ p.tipo }} · {{ p.fecha }}</span></h1>
+<div class="card"><p><b>Concepto:</b> {{ p.concepto }}</p><div class="scroll"><table><tr><th>Cuenta</th><th>Concepto</th><th class="n">Debe</th><th class="n">Haber</th></tr>
+{% for m in movs %}<tr><td>{{ m.codigo }} {{ m.cuenta }}</td><td>{{ m.concepto }}</td><td class="n">{{ m.debe|money if m.debe else '' }}</td><td class="n">{{ m.haber|money if m.haber else '' }}</td></tr>{% endfor %}
+<tr class="tot"><td colspan="2">Sumas iguales</td><td class="n">{{ td|money }}</td><td class="n">{{ th|money }}</td></tr></table></div>
+<form method="post" action="{{ url_for('poliza_eliminar', pid=p.id) }}" style="margin-top:1rem"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="del">Eliminar póliza</button> <a class="btn sec" href="{{ url_for('polizas') }}">Volver</a></form></div>{% endblock %}

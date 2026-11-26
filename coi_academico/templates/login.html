@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Iniciar sesión{% endblock %}
+{% block content %}<div class="card auth"><h1>Iniciar sesión</h1>
+<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Usuario</label><input name="usuario" required autofocus autocomplete="username" style="width:100%">
+<label>Contraseña</label><input name="password" type="password" required autocomplete="current-password" style="width:100%">
+<p><button>Entrar</button> <a class="btn sec" href="{{ url_for('registro') }}">Crear cuenta</a></p></form></div>{% endblock %}

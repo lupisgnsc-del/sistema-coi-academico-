@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Catálogo de cuentas{% endblock %}
+{% block content %}<h1>Catálogo de cuentas</h1>
+<div class="card"><div class="scroll"><table><tr><th>Código</th><th>Cuenta</th><th>Nat.</th><th>Tipo</th><th>Agrupador SAT</th><th class="n">Saldo inicial</th><th></th></tr>
+{% for c in cuentas %}<tr><td>{{ c.codigo }}</td><td>{{ c.nombre }}</td><td>{{ c.naturaleza }}</td><td>{{ c.tipo }}</td><td>{{ c.agrupador }}</td>
+<td class="n"><form method="post" action="{{ url_for('saldo_cuenta', cid=c.id) }}" style="display:flex;gap:.3rem;justify-content:flex-end"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input name="saldo_inicial" value="{{ '%.2f'|format(c.saldo_inicial) }}" style="width:110px;text-align:right"><button class="sec">OK</button></form></td>
+<td><form method="post" action="{{ url_for('eliminar_cuenta', cid=c.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="del">×</button></form></td></tr>{% endfor %}</table></div>
+<p><a class="btn sec" href="{{ url_for('exportar_pdf', tipo='catalogo') }}">Descargar PDF</a></p></div>
+<div class="card"><h2>Agregar cuenta</h2>
+<form method="post" class="row"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div><label>Código</label><input name="codigo" required maxlength="20" placeholder="1080-000"></div>
+<div><label>Nombre</label><input name="nombre" required maxlength="100"></div>
+<div><label>Naturaleza</label><select name="naturaleza"><option value="D">Deudora</option><option value="A">Acreedora</option></select></div>
+<div><label>Tipo</label><select name="tipo"><option>Activo</option><option>Pasivo</option><option>Capital</option><option>Ingresos</option><option>Costos</option><option>Gastos</option></select></div>
+<div><label>Agrupador SAT</label><input name="agrupador" maxlength="12" style="width:90px"></div>
+<div><label>Saldo inicial</label><input name="saldo_inicial" value="0" style="width:110px"></div>
+<button>Agregar</button></form></div>{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Inicio{% endblock %}
+{% block content %}<h1>{{ emp.nombre }} · Ejercicio {{ emp.ejercicio }}</h1>
+<div class="stats"><div class="card stat"><b>{{ n_cta }}</b><br>Cuentas</div><div class="card stat"><b>{{ n_pol }}</b><br>Pólizas</div></div>
+<div class="card"><a class="btn" href="{{ url_for('poliza_nueva') }}">+ Nueva póliza</a>
+<a class="btn sec" href="{{ url_for('reporte', tipo='balanza') }}">Balanza</a>
+<a class="btn sec" href="{{ url_for('exportar_excel') }}">Descargar Excel completo</a></div>
+<div class="card"><h2>Últimas pólizas</h2><table><tr><th>Póliza</th><th>Fecha</th><th>Concepto</th></tr>
+{% for p in ultimas %}<tr><td><a href="{{ url_for('poliza_ver', pid=p.id) }}">{{ p.tipo[0] }}-{{ p.numero }}</a></td><td>{{ p.fecha }}</td><td>{{ p.concepto }}</td></tr>
+{% else %}<tr><td colspan="3">Sin pólizas todavía.</td></tr>{% endfor %}</table></div>{% endblock %}

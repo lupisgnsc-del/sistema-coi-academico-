@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% block title %}{{ titulo }}{% endblock %}
+{% block content %}<h1>Reportes</h1>
+<div class="tabs">{% for k, v in tipos.items() %}<a class="btn {{ '' if k == tipo else 'sec' }}" href="{{ url_for('reporte', tipo=k, desde=desde, hasta=hasta) }}">{{ v }}</a>{% endfor %}</div>
+<form method="get" class="card row">
+<div><label>Desde</label><input type="date" name="desde" value="{{ desde }}"></div>
+<div><label>Hasta</label><input type="date" name="hasta" value="{{ hasta }}"></div>
+{% if tipo == 'auxiliar' %}<div><label>Cuenta</label><select name="cuenta">{% for c in cuentas %}<option value="{{ c.id }}" {{ 'selected' if c.id == cuenta_id }}>{{ c.codigo }} {{ c.nombre }}</option>{% endfor %}</select></div>{% endif %}
+<button>Ver</button>
+<a class="btn sec" href="{{ url_for('exportar_pdf', tipo=tipo, desde=desde, hasta=hasta, cuenta=cuenta_id) }}">Descargar PDF</a>
+<a class="btn sec" href="{{ url_for('exportar_excel', desde=desde, hasta=hasta) }}">Descargar Excel (con fórmulas)</a></form>
+<div class="card"><h2>{{ titulo }}</h2><div class="scroll">
+{% if tipo == 'balanza' %}
+<table><tr><th>Código</th><th>Cuenta</th><th>Nat.</th><th class="n">Saldo inicial</th><th class="n">Cargos</th><th class="n">Abonos</th><th class="n">Saldo final</th></tr>
+{% for f in filas %}<tr><td>{{ f.codigo }}</td><td>{{ f.nombre }}</td><td>{{ f.naturaleza }}</td><td class="n">{{ f.ini|money }}</td><td class="n">{{ f.cargos|money }}</td><td class="n">{{ f.abonos|money }}</td><td class="n">{{ f.fin|money }}</td></tr>{% endfor %}
+<tr class="tot"><td colspan="4">Totales</td><td class="n">{{ tot.cargos|money }}</td><td class="n">{{ tot.abonos|money }}</td><td></td></tr></table>
+{% elif tipo == 'resultados' %}
+<table><tr><th>Concepto</th><th class="n">Importe</th></tr><tr><td>Ingresos</td><td class="n">{{ er.ingresos|money }}</td></tr><tr><td>(-) Costos</td><td class="n">{{ er.costos|money }}</td></tr>
+<tr class="tot"><td>Utilidad bruta</td><td class="n">{{ er.utilidad_bruta|money }}</td></tr><tr><td>(-) Gastos</td><td class="n">{{ er.gastos|money }}</td></tr>
+<tr class="tot"><td>Utilidad (pérdida) neta</td><td class="n">{{ er.utilidad_neta|money }}</td></tr></table><p class="small">Acumulado al {{ hasta }}.</p>
+{% elif tipo == 'balance' %}
+<table><tr><th>Concepto</th><th class="n">Importe</th></tr><tr class="tot"><td>Activo</td><td class="n">{{ bg.activo|money }}</td></tr><tr><td>Pasivo</td><td class="n">{{ bg.pasivo|money }}</td></tr>
+<tr><td>Capital contable</td><td class="n">{{ bg.capital|money }}</td></tr><tr><td>Resultado del ejercicio</td><td class="n">{{ bg.resultado|money }}</td></tr>
+<tr class="tot"><td>Total pasivo + capital</td><td class="n">{{ bg.pasivo_capital|money }}</td></tr><tr><td>Diferencia (debe ser 0)</td><td class="n">{{ bg.diferencia|money }}</td></tr></table>
+{% elif tipo == 'auxiliar' %}{% if aux %}
+<p><b>{{ aux.cuenta.codigo }} {{ aux.cuenta.nombre }}</b> · Saldo inicial: {{ aux.cuenta.ini|money }}</p>
+<table><tr><th>Fecha</th><th>Póliza</th><th>Concepto</th><th class="n">Debe</th><th class="n">Haber</th><th class="n">Saldo</th></tr>
+{% for l in aux.lineas %}<tr><td>{{ l.fecha }}</td><td>{{ l.poliza }}</td><td>{{ l.concepto }}</td><td class="n">{{ l.debe|money }}</td><td class="n">{{ l.haber|money }}</td><td class="n">{{ l.saldo|money }}</td></tr>
+{% else %}<tr><td colspan="6">Sin movimientos en el periodo.</td></tr>{% endfor %}</table>{% else %}<p>No hay cuentas.</p>{% endif %}
+{% elif tipo == 'catalogo' %}
+<table><tr><th>Código</th><th>Cuenta</th><th>Naturaleza</th><th>Tipo</th><th>Agrupador SAT</th></tr>
+{% for f in filas %}<tr><td>{{ f.codigo }}</td><td>{{ f.nombre }}</td><td>{{ 'Deudora' if f.naturaleza == 'D' else 'Acreedora' }}</td><td>{{ f.tipo }}</td><td>{{ f.agrupador }}</td></tr>{% endfor %}</table>
+{% else %}
+<table><tr><th>Fecha</th><th>Póliza</th><th>Cuenta</th><th>Concepto</th><th class="n">Debe</th><th class="n">Haber</th></tr>
+{% for x in movs %}<tr><td>{{ x.fecha }}</td><td>{{ x.tipo[0] }}-{{ x.numero }}</td><td>{{ x.codigo }} {{ x.cuenta }}</td><td>{{ x.concepto or x.pconcepto }}</td><td class="n">{{ x.debe|money if x.debe else '' }}</td><td class="n">{{ x.haber|money if x.haber else '' }}</td></tr>
+{% else %}<tr><td colspan="6">Sin pólizas en el periodo.</td></tr>{% endfor %}</table>
+{% endif %}</div></div>{% endblock %}
